@@ -13,12 +13,16 @@ const StyleButton = styled.button`
      &:hover{
         transform:scale(1.1);
      }
+
+     &:disabled{
+        background-color: #bcb8b1;
+     }
 `;
 
-export default function Button({ text, onClick }) {
+export default function Button({ text, onClick, disabled }) {
 
     return (
-        <StyleButton onClick={onClick}>{text}</StyleButton>
+        <StyleButton onClick={onClick} disabled={disabled}>{text}</StyleButton>
     );
 }
 
