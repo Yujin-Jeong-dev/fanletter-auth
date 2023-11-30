@@ -18,14 +18,18 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
     //응답을 내보내기 전 수행되는 함수  
     function (response) {
-        //응답을 받으면 로그인 정보 저장 또는 회원가입 성공 메세지
-        const { userId, nickname, accessToken, message } = response.data;
-        if (!message) {
+        //로그인 성공 시 액세스 토큰 로컬스토리지에 저장
+        if (response.status === 200) {
+            const { userId, nickname, accessToken } = response.data;
             localStorage.setItem('userId', userId);
             localStorage.setItem('nickname', nickname);
             localStorage.setItem('accessToken', accessToken);
         }
-        else alert(message);
+        //회원가입 성공 시 성공 메세지 알림
+        else if (response.status === 201) {
+            const { message } = response.data;
+            alert(message);
+        }
         return response;
     },
     //오류 응답을 내보내기 전 수행되는 함수
