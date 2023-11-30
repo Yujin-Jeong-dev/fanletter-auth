@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import userImg from '../asset/user.png'
 import { GiLoveLetter } from 'react-icons/gi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { onAddLetter } from '../redux/modules/lettersSlice';
 import { letterFilters } from '../redux/modules/filtersSlice';
 
@@ -14,6 +14,7 @@ export default function LetterForm() {
     const filters = letterFilters;
     const dispatch = useDispatch();
     const [form, setForm] = useState(initialState);
+    const nickname = useSelector((state) => state.auth).nickname;
     const sendTo = filters.filter(who => who !== 'All');
 
     const handleChange = (e) => {
@@ -23,8 +24,8 @@ export default function LetterForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (form.nickname.trim() === '' || form.content.trim() === '') {
-            alert('닉네임과 내용은 필수 입력값입니다.');
+        if (form.content.trim() === '') {
+            alert('내용은 필수 입력값입니다.');
             return;
         }
         //입력한 값을 LetterList에 추가
@@ -42,10 +43,10 @@ export default function LetterForm() {
         <>
             <Form onSubmit={handleSubmit}>
                 <h1><GiLoveLetter /></h1>
-                <Section>
+                <NicknameSection>
                     <label htmlFor="nickname">Nickname:</label>
-                    <Input type='text' id="nickname" name='nickname' value={form.nickname} onChange={handleChange} maxLength={20} placeholder='최대 20자까지 가능합니다.' />
-                </Section>
+                    <span>{nickname}</span>
+                </NicknameSection>
                 <Section>
                     <label htmlFor="content">Content:</label>
                     <Textarea id='content' name='content' value={form.content} onChange={handleChange} placeholder='최대 100자까지만 작성 가능합니다.' maxLength={100} />
@@ -78,20 +79,25 @@ const Form = styled.form`
     }
 `;
 
+const NicknameSection = styled.section`
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    span{
+        font-size:1.2rem;
+        margin-left: 1rem;
+    }
+`
+
 const Section = styled.section`
     display:flex;
     justify-content: center;
     align-items: center;
-    margin:1rem 0;;
+    margin:1rem 0;
+
 `;
 
-const Input = styled.input`
-    width:100%;
-    height: 2rem;
-    font-size: 1.1rem;
-    padding:0.5rem;
-    margin-left:0.5rem;
-`
 
 const Textarea = styled.textarea`
     width:100%;

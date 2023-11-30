@@ -1,7 +1,9 @@
 
 import { createSlice } from '@reduxjs/toolkit';
+import userImg from '../../asset/user.png';
 
 const initialState = getUser();
+
 
 const authSlice = createSlice({
     name: 'auth',
@@ -9,7 +11,7 @@ const authSlice = createSlice({
     reducers: {
         userLogin: (state, action) => {
             const { id, nickname } = action.payload;
-            state = { id, nickname };
+            state = { ...state, id, nickname };
         }
     }
 });
@@ -17,7 +19,9 @@ const authSlice = createSlice({
 function getUser() {
     const id = localStorage.getItem('userId');
     const nickname = localStorage.getItem('nickname');
-    return id && nickname ? { id, nickname } : { id: '', nickname: '' };
+    const accessToken = localStorage.getItem('accessToken');
+    const initialState = { id: '', nickname: '', avartar: userImg, accessToken: '' }
+    return accessToken ? { id, nickname, accessToken, avatar: userImg } : initialState;
 }
 
 export default authSlice.reducer;
