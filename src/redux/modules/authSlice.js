@@ -7,20 +7,18 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state, action) => {
+        userLogin: (state, action) => {
             const { id, nickname } = action.payload;
-            localStorage.setItem('id', id);
-            localStorage.setItem('nickname', nickname);
             state = { id, nickname };
         }
     }
 });
 
 function getUser() {
-    const id = localStorage.getItem('id');
+    const id = localStorage.getItem('userId');
     const nickname = localStorage.getItem('nickname');
     return id && nickname ? { id, nickname } : { id: '', nickname: '' };
 }
 
 export default authSlice.reducer;
-export const { login } = authSlice.actions;
+export const { userLogin } = authSlice.actions;
