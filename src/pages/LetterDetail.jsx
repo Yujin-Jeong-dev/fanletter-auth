@@ -48,7 +48,6 @@ export default function LetterDetail() {
     }
     return (
         <>
-            <Button text="Home" onClick={() => navigate('/')} />
             <Detail>
                 <header>
                     <Avatar>
