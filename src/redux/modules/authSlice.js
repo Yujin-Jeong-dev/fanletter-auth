@@ -11,17 +11,17 @@ const authSlice = createSlice({
     reducers: {
         userLogin: (state, action) => {
             const { id, nickname } = action.payload;
-            state = { ...state, id, nickname };
+            state = { ...state, userId: id, nickname };
         }
     }
 });
 
 function getUser() {
-    const id = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     const nickname = localStorage.getItem('nickname');
     const accessToken = localStorage.getItem('accessToken');
-    const initialState = { id: '', nickname: '', avartar: userImg, accessToken: '' }
-    return accessToken ? { id, nickname, accessToken, avatar: userImg } : initialState;
+    const initialState = { userId: '', nickname: '', avartar: userImg, accessToken: '' }
+    return accessToken ? { userId, nickname, accessToken, avatar: userImg } : initialState;
 }
 
 export default authSlice.reducer;

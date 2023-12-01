@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Letter from './Letter';
 import LetterForm from './LetterForm';
-import { useSelector } from 'react-redux';
-import { filterLetters } from '../redux/modules/lettersSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { __getLetters, filterLetters } from '../redux/modules/lettersSlice';
 
 
 export default function LetterList() {
-    const letters = useSelector((state) => state.letters);
+    const { isLoading, error, letters } = useSelector((state) => state.letters);
     const filter = useSelector((state) => state.filters.filter);
     const filtered = filterLetters(letters, filter);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(__getLetters());
+    }, [])
+
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+
     console.log(letters, filtered)
     return (
         <>

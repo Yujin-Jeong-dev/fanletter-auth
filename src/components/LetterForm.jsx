@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import userImg from '../asset/user.png'
 import { GiLoveLetter } from 'react-icons/gi';
 import { useDispatch, useSelector } from 'react-redux';
-import { onAddLetter } from '../redux/modules/lettersSlice';
+import { __onAddLetter } from '../redux/modules/lettersSlice';
 import { letterFilters } from '../redux/modules/filtersSlice';
 
 
@@ -14,7 +14,9 @@ export default function LetterForm() {
     const filters = letterFilters;
     const dispatch = useDispatch();
     const [form, setForm] = useState(initialState);
-    const nickname = useSelector((state) => state.auth).nickname;
+    const auth = useSelector((state) => state.auth);
+    const userId = auth.userId;
+    const nickname = auth.nickname;
     const sendTo = filters.filter(who => who !== 'All');
 
     const handleChange = (e) => {
@@ -32,10 +34,12 @@ export default function LetterForm() {
         const newLetter = {
             ...form,
             id: uuidv4(),
+            userId,
+            nickname,
             avatar: userImg,
             createdAt: new Date(),
         };
-        dispatch(onAddLetter(newLetter));
+        dispatch(__onAddLetter(newLetter));
         setForm(initialState);
 
     }
@@ -65,7 +69,7 @@ export default function LetterForm() {
     );
 }
 
-const initialState = { nickname: '', content: '', writedTo: '민지' };
+const initialState = { content: '', writedTo: '민지' };
 const Form = styled.form`
     width:500px;
     height: 350px;
