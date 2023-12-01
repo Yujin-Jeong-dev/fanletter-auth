@@ -7,7 +7,7 @@ import { filterLetters } from '../redux/modules/lettersSlice';
 
 
 export default function Letter() {
-    const letters = useSelector((state) => state.letters);
+    const { letters } = useSelector((state) => state.letters);
     const filter = useSelector((state) => state.filters.filter);
     const filtered = filterLetters(letters, filter);
     const navigate = useNavigate();
