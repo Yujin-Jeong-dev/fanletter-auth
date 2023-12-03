@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from 'ui/Button';
 import { SlEnvolopeLetter } from 'react-icons/sl'
-import { useDispatch } from 'react-redux';
-import { onDeleteLetter, onUpdateLetter } from '../redux/modules/lettersSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { __onDeleteLetter, __onUpdateLetter } from '../redux/modules/lettersSlice';
 
 
 
@@ -12,10 +12,13 @@ export default function LetterDetail() {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
-    const [editable, setEditable] = useState(false);
+    const userNickname = useSelector(state => state.auth).nickname;
     let { id, avatar, content, createdAt, nickname, writedTo } = location.state.letter;
+    const [editable, setEditable] = useState(false);
     const [text, setText] = useState('');
     const [updateText, setUpdateText] = useState(content);
+
+
 
     const editLetter = (e) => {
         setEditable(true);
@@ -33,14 +36,16 @@ export default function LetterDetail() {
             setUpdateText(text);
             //수정한 text가 담긴 편지 정보 데이터를 전달함
             const updateLetter = { id, avatar, content: text, createdAt, nickname, writedTo };
-            dispatch(onUpdateLetter(updateLetter));
+            if (!localStorage.getItem('accessToken')) return;
+            dispatch(__onUpdateLetter(updateLetter));
             navigate('/');
 
         }
     }
     const deleteLetter = () => {
         if (window.confirm('정말로 삭제하시겠습니까?')) {
-            dispatch(onDeleteLetter(id));
+            if (!localStorage.getItem('accessToken')) return;
+            dispatch(__onDeleteLetter(id));
             alert('해당 편지가 삭제되었습니다');
             navigate('/');
         }
@@ -59,12 +64,12 @@ export default function LetterDetail() {
 
                 <WriteTo><SlEnvolopeLetter /> TO. {writedTo}</WriteTo>
                 {editable ? (<Content as="textarea" defaultValue={updateText} onChange={editLetter} />) : (<Content>{updateText}</Content>)}
-
-                <Buttons>
-                    {/* 수정이 가능하게 되면 수정완료 버튼과 취소 버튼으로 변경.  */}
-                    {editable ? (<Button text="수정완료" onClick={updateLetter} />) : (<Button text="수정" onClick={editLetter} />)}
-                    {editable ? (<Button text="취소" onClick={() => setEditable(false)} />) : (<Button text="삭제" onClick={deleteLetter} />)}
-                </Buttons>
+                {userNickname === nickname &&
+                    <Buttons>
+                        {/* 수정이 가능하게 되면 수정완료 버튼과 취소 버튼으로 변경.  */}
+                        {editable ? (<Button text="수정완료" onClick={updateLetter} />) : (<Button text="수정" onClick={editLetter} />)}
+                        {editable ? (<Button text="취소" onClick={() => setEditable(false)} />) : (<Button text="삭제" onClick={deleteLetter} />)}
+                    </Buttons>}
             </Detail>
         </>
 

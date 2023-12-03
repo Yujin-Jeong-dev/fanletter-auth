@@ -6,18 +6,20 @@ import Button from 'ui/Button';
 import { useNavigate } from 'react-router-dom';
 import api from '../axios/api';
 
+
+
 export default function Login() {
     const [isLogin, setIsLogin] = useState(true);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
     const initialState = isLogin ? { id: '', password: '' } : { nickname: '', id: '', password: '' };
     const [form, setForm] = useState(initialState);
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const logout = () => {
         dispatch(userLogout());
         navigate('/login');
     }
+
 
     const checkUser = async () => {
         try {
@@ -54,11 +56,11 @@ export default function Login() {
     const login = async () => {
         //만료 시간 1분이 지나면 회원 정보 api 불러옴 만약 오류가(401번) 발생하면 로그아웃 처리시킴. 
         try {
-            await api.post('/login?expiresIn=30s', { id: form.id, password: form.password });
+            await api.post('/login?expiresIn=1h', { id: form.id, password: form.password });
             // const { nickname, accessToken } = data;
             // localStorage.setItem('nickname', nickname);
             // localStorage.setItem('accessToken', accessToken);
-            const logoutTimer = setTimeout(checkUser, 1000 * 30);
+            setTimeout(checkUser, 1000 * 60 * 60);
         }
         catch (error) {
             console.log(error);
@@ -101,6 +103,11 @@ export default function Login() {
 
 
 
+
+
+
+
+
 const LoginForm = styled.form`
     width:500px;
     height: 350px;
@@ -108,7 +115,7 @@ const LoginForm = styled.form`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin:2.5rem auto;
+    margin:10rem auto;
     background-color: #b8b8ff;
     border-radius: 1rem;
 

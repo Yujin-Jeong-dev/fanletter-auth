@@ -28,7 +28,32 @@ export const __onAddLetter = createAsyncThunk(
     "ADD_LETTER",
     async (payload, thunkAPI) => {
         try {
-            const response = await letterApi.post(`${process.env.REACT_APP_LETTER_SERVER_URL}/letters`, payload);
+            const response = await letterApi.patch(`${process.env.REACT_APP_LETTER_SERVER_URL}/letters`, payload);
+            return thunkAPI.fulfillWithValue(response.data);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const __onUpdateLetter = createAsyncThunk(
+    "UPDATE_LETTER",
+    async (payload, thunkAPI) => {
+        try {
+            const { id } = payload;
+            const response = await letterApi.patch(`${process.env.REACT_APP_LETTER_SERVER_URL}/letters/${id}`, payload);
+            return thunkAPI.fulfillWithValue(response.data);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const __onDeleteLetter = createAsyncThunk(
+    "DELETE_LETTER",
+    async (payload, thunkAPI) => {
+        try {
+            const response = await letterApi.delete(`${process.env.REACT_APP_LETTER_SERVER_URL}/letters/${payload}`);
             return thunkAPI.fulfillWithValue(response.data);
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
@@ -43,21 +68,6 @@ export const __onAddLetter = createAsyncThunk(
 const lettersSlice = createSlice({
     name: 'letters',
     initialState,
-    // reducers: {
-    // 
-    //     onDeleteLetter: (state, action) => {
-    //         letters = state.filter(letter => letter.id !== action.payload);
-    //         saveLetters();
-    //         return letters;
-    //     },
-    //     onUpdateLetter: (state, action) => {
-    //         const { id } = action.payload;
-    //         letters = state.map(letter => letter.id === id ? action.payload : letter);
-    //         saveLetters();
-    //         return letters;
-    //     }
-
-    // },
     extraReducers: {
         [__getLetters.pending]: (state, action) => {
             state.isLoading = true;
@@ -75,6 +85,12 @@ const lettersSlice = createSlice({
         },
         [__onAddLetter.fulfilled]: (state, action) => {
             state.letters.push(action.payload);
+        },
+        [__onUpdateLetter.fulfilled]: (state, action) => {
+            state.letters.map(letter => letter.id === action.payload.id ? action.payload : letter);
+        },
+        [__onDeleteLetter.fulfilled]: (state, action) => {
+            state.letters.filter(letter => letter.id !== action.payload.id);
         }
     }
 })
@@ -87,4 +103,4 @@ export const filterLetters = (letters, filter) => {
 }
 
 export default lettersSlice.reducer;
-export const { onAddLetter, onDeleteLetter, onUpdateLetter } = lettersSlice.actions;
+
