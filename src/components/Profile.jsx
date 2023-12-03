@@ -11,9 +11,7 @@ export default function Profile() {
     const { userId, nickname, avatar } = useSelector(state => state.auth);
     const [updateText, setUpdateText] = useState(nickname);
 
-    const updateUserNickname = () => {
 
-    }
 
     const updateProfile = () => {
 
