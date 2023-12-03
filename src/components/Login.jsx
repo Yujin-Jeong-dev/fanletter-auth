@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { userLogin } from '../redux/modules/authSlice';
+import { userLogin, userLogout } from '../redux/modules/authSlice';
 import styled from 'styled-components';
 import Button from 'ui/Button';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,28 @@ export default function Login() {
     const dispatch = useDispatch();
     const initialState = isLogin ? { id: '', password: '' } : { nickname: '', id: '', password: '' };
     const [form, setForm] = useState(initialState);
+
+
+    const logout = () => {
+        dispatch(userLogout());
+        navigate('/login');
+    }
+
+    const checkUser = async () => {
+        try {
+            console.log('유저 확인좀 진행할게');
+            await api.get('/user', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                }
+            })
+        }
+        catch (error) {
+            logout();
+        }
+    }
+
+
 
     //회원가입 버튼 클릭 시 로그인 화면 보여주기
     const showLogin = async () => {
@@ -30,11 +52,13 @@ export default function Login() {
     //입력값이 하나라도 공백이 있으면 false, 그렇지 않다면 true 
     const buttonActive = Object.values(form).includes('') ? true : false;
     const login = async () => {
+        //만료 시간 1분이 지나면 회원 정보 api 불러옴 만약 오류가(401번) 발생하면 로그아웃 처리시킴. 
         try {
-            await api.post('/login', { id: form.id, password: form.password });
+            await api.post('/login?expiresIn=30s', { id: form.id, password: form.password });
             // const { nickname, accessToken } = data;
             // localStorage.setItem('nickname', nickname);
             // localStorage.setItem('accessToken', accessToken);
+            const logoutTimer = setTimeout(checkUser, 1000 * 30);
         }
         catch (error) {
             console.log(error);
@@ -72,6 +96,7 @@ export default function Login() {
         </>
     );
 }
+
 
 
 

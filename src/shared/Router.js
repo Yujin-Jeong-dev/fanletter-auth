@@ -17,7 +17,7 @@ const Router = () => {
                     <Route path='' element={<ProtectedRoute requireUser><Navbar /><Banner /><Home /></ProtectedRoute>} />
                     <Route path='letterDetail/:letterId' element={<ProtectedRoute requireUser><Navbar /><LetterDetail /></ProtectedRoute>} />
                     <Route path='profile' element={<ProtectedRoute requireUser><Navbar /><Profile /></ProtectedRoute>} />
-                    <Route path='login' element={<ProtectedRoute requireUser={false}> <Login /></ProtectedRoute>} />
+                    <Route path='login' element={<Login />} />
                 </Route>
             </Routes>
         </BrowserRouter>
