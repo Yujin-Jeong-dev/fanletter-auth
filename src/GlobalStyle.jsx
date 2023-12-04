@@ -1,7 +1,10 @@
 const { createGlobalStyle } = require("styled-components");
+import reset from 'styled-reset';
 
 
 const Globalstyle = createGlobalStyle`
+    ${reset}
+    
     a{
         text-decoration: none;
         color: inherit;
