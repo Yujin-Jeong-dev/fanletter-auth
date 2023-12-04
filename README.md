@@ -59,4 +59,5 @@
 
      
 
-### 배포주소 : https://redux--newjeans-fanletter.netlify.app/
+### 배포주소 : https://redux-thunk--cheerful-pixie-c7464d.netlify.app/login
+
