@@ -27,7 +27,7 @@ export default function Profile() {
 
             try {
                 //api로 수정된 부분만 변경 요청
-                const response = await api.patch('/profile', updateInfo, {
+                await api.patch('/profile', updateInfo, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
@@ -102,11 +102,11 @@ const NicknameInput = styled.input`
 
 
 
-const InfoBox = styled.div`
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding:1rem;
-            gap:1rem;
- `
+// const InfoBox = styled.div`
+//             display: flex;
+//             flex-direction: column;
+//             justify-content: center;
+//             padding:1rem;
+//             gap:1rem;
+//  `
 

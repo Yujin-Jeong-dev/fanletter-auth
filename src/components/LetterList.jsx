@@ -14,6 +14,7 @@ export default function LetterList() {
 
     useEffect(() => {
         dispatch(__getLetters());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     if (isLoading) return <p>Loading...</p>;
