@@ -49,6 +49,19 @@ export const __onUpdateLetter = createAsyncThunk(
     }
 );
 
+// export const __user__onUpdateLetter = createAsyncThunk(
+//     "UPDATE_LETTER",
+//     async (payload, thunkAPI) => {
+//         try {
+//             const { userId } = payload;
+//             const response = await letterApi.patch(`${process.env.REACT_APP_LETTER_SERVER_URL}/letters?nickname=${userId}`, payload);
+//             return thunkAPI.fulfillWithValue(response.data);
+//         } catch (error) {
+//             return thunkAPI.rejectWithValue(error);
+//         }
+//     }
+// );
+
 export const __onDeleteLetter = createAsyncThunk(
     "DELETE_LETTER",
     async (payload, thunkAPI) => {
@@ -89,6 +102,9 @@ const lettersSlice = createSlice({
         [__onUpdateLetter.fulfilled]: (state, action) => {
             state.letters.map(letter => letter.id === action.payload.id ? action.payload : letter);
         },
+        // [__user__onUpdateLetter.fulfilled]: (state, action) => {
+        //     state.letters.map(letter => letter.userId === action.payload.userId ? action.payload : letter);
+        // },
         [__onDeleteLetter.fulfilled]: (state, action) => {
             state.letters.filter(letter => letter.id !== action.payload.id);
         }
